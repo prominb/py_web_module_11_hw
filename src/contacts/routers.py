@@ -27,17 +27,14 @@ async def create_contacts(contact: ContactsCreate, db: AsyncSession = Depends(ge
     return await repo.create_contacts(contact)
 
 
-# @router.delete("/{contact_id}")
-# async def delete_contact(contact_id: int, db: AsyncSession = Depends(get_db)):
-#     repo = ContactsRepository(db)
-#     await repo.delete_contact(contact_id)
-#     return {"message": f"Contact {contact_id} deleted"}
+@router.get("/search/", response_model=list[ContactsResponse])
+async def search_contacts(query: str, db: AsyncSession = Depends(get_db)):
+    repo = ContactsRepository(db)
+    return await repo.search_contacts(query)
 
 
-
-
-
-# @router.get("/search/", response_model=list[ContactsResponse])
-# async def search_contacts(query: str, db: AsyncSession = Depends(get_db)):
-#     repo = ContactsRepository(db)
-#     return await repo.search_contacts(query)
+@router.delete("/{contact_id}")
+async def delete_contact(contact_id: int, db: AsyncSession = Depends(get_db)):
+    repo = ContactsRepository(db)
+    await repo.delete_contact(contact_id)
+    return {"message": f"Contact {contact_id} deleted"}
