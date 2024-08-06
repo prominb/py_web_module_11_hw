@@ -2,13 +2,13 @@ import os
 
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-# from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL_ALEMBIC = os.getenv("DATABASE_URL_ALEMBIC")
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(
