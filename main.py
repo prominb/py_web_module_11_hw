@@ -8,8 +8,6 @@ from src.contacts.routers import router as router_contacts
 
 app = FastAPI()
 
-app.include_router(router_contacts, prefix="/contacts", tags=["contacts"])
-
 
 @app.get("/api/healthchecker")
 async def healthchecker(db: AsyncSession = Depends(get_db)):
@@ -24,3 +22,8 @@ async def healthchecker(db: AsyncSession = Depends(get_db)):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Error connecting to the database")
+
+
+app.include_router(router_contacts, prefix="/contacts", tags=["contacts"])
+
+
