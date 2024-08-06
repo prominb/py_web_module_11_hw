@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "py-web-module-11-hw"
+version = "0.1.0"
+description = "My HW Contacts on FastAPI"
+authors = ["Your Name <you@example.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.112.0"
+sqlalchemy = "^2.0.32"
+asyncpg = "^0.29.0"
+asyncio = "^3.4.3"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
