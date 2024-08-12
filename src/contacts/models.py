@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import Integer, String, Date  #, DateTime  # забув яка різниця Date та DateTime
+from sqlalchemy import Integer, String, Date
 
 from config.db import Base
 

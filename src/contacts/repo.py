@@ -22,7 +22,6 @@ class ContactsRepository:
         await self.session.refresh(new_contact)  # To get the ID from the database
         return new_contact
 
-
     async def get_birthdays(self, days: int):
         get_month = date.today().month
         get_day = date.today().day
@@ -32,9 +31,8 @@ class ContactsRepository:
         )
         results = await self.session.execute(stmt)
         return results.scalars().all()
-    
 
-    async def get_by_id(self, id: int):  # = 1):
+    async def get_by_id(self, id: int):
         q = select(Contact).where(Contact.id == id)
         result = await self.session.execute(q)
         return result.one_or_none()

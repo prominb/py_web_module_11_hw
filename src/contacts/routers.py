@@ -30,8 +30,6 @@ async def create_contacts(contact: ContactsCreate, db: AsyncSession = Depends(ge
 @router.get("/birthdays", response_model=list[ContactsResponse])
 async def get_birthdays(days: int = Query(default=7, ge=7), db: AsyncSession = Depends(get_db)):
     repo = ContactsRepository(db)
-    # contacts = await repo.get_birthdays(days, db)
-    # return contacts
     return await repo.get_birthdays(days)
 
 
