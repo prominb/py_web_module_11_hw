@@ -1,4 +1,6 @@
-from sqlalchemy import select
+from datetime import date, timedelta
+
+from sqlalchemy import select, extract
 
 from src.contacts.models import Contact
 from src.contacts.schemas import ContactsCreate, ContactsUpdate
@@ -19,7 +21,19 @@ class ContactsRepository:
         await self.session.commit()
         await self.session.refresh(new_contact)  # To get the ID from the database
         return new_contact
+
+
+    async def get_birthdays(self, days: int):
+        get_month = date.today().month
+        get_day = date.today().day
+        stmt = select(Contact).filter(
+            extract("month", Contact.birthday) == get_month,
+            extract("day", Contact.birthday) <= get_day + days
+        )
+        results = await self.session.execute(stmt)
+        return results.scalars().all()
     
+
     async def get_by_id(self, id: int):  # = 1):
         q = select(Contact).where(Contact.id == id)
         result = await self.session.execute(q)

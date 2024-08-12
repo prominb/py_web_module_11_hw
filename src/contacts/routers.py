@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Path
+from fastapi import APIRouter, Depends, HTTPException, status, Path, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.db import get_db
@@ -25,6 +25,14 @@ async def get_contacts(
 async def create_contacts(contact: ContactsCreate, db: AsyncSession = Depends(get_db)):
     repo = ContactsRepository(db)
     return await repo.create_contacts(contact)
+
+
+@router.get("/birthdays", response_model=list[ContactsResponse])
+async def get_birthdays(days: int = Query(default=7, ge=7), db: AsyncSession = Depends(get_db)):
+    repo = ContactsRepository(db)
+    # contacts = await repo.get_birthdays(days, db)
+    # return contacts
+    return await repo.get_birthdays(days)
 
 
 @router.get("/{id}", response_model=ContactsResponse)
