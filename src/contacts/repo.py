@@ -19,6 +19,11 @@ class ContactsRepository:
         await self.session.commit()
         await self.session.refresh(new_contact)  # To get the ID from the database
         return new_contact
+    
+    async def get_by_id(self, id: int = 1):
+        q = select(Contact).where(Contact.id == id)
+        result = await self.session.execute(q)
+        return result.one_or_none()
 
     async def search_contacts(self, query):
         q = select(Contact).filter(
