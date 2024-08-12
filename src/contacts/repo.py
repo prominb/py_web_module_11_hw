@@ -34,21 +34,17 @@ class ContactsRepository:
         results = await self.session.execute(q)
         return results.scalars().all()
     
-    async def update_contact(self, id: int, body: ContactsUpdate):
-        q = select(Contact).where(Contact.id == id)
-        result = await self.session.execute(q)
-        # contact = result.one_or_none()
+    async def update_contact(self, contact_id: int, body: ContactsUpdate):
+        stmt = select(Contact).filter_by(id=contact_id)
+        result = await self.session.execute(stmt)
         contact = result.scalar_one_or_none()
         if contact:
-            upd_contact = Contact(**body.model_dump())
-            # upd_contact.first_name = body.first_name
-            # upd_contact.last_name = body.last_name
-            # upd_contact.email = body.email
-            # upd_contact.phone_number = body.phone_number
-            # upd_contact.birthday = body.birthday
-            # upd_contact.additional_info = body.additional_info
-            contact = upd_contact
-            # self.session.add(contact)
+            contact.first_name = body.first_name
+            contact.last_name = body.last_name
+            contact.email = body.email
+            contact.phone_number = body.phone_number
+            contact.birthday = body.birthday
+            contact.additional_info = body.additional_info
             await self.session.commit()
             await self.session.refresh(contact)
         return contact
