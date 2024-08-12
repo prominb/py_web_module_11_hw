@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
 from src.contacts.models import Contact
-from src.contacts.schemas import ContactsCreate
+from src.contacts.schemas import ContactsCreate, ContactsUpdate
 
 
 class ContactsRepository:
@@ -33,6 +33,25 @@ class ContactsRepository:
         )
         results = await self.session.execute(q)
         return results.scalars().all()
+    
+    async def update_contact(self, id: int, body: ContactsUpdate):
+        q = select(Contact).where(Contact.id == id)
+        result = await self.session.execute(q)
+        # contact = result.one_or_none()
+        contact = result.scalar_one_or_none()
+        if contact:
+            upd_contact = Contact(**body.model_dump())
+            # upd_contact.first_name = body.first_name
+            # upd_contact.last_name = body.last_name
+            # upd_contact.email = body.email
+            # upd_contact.phone_number = body.phone_number
+            # upd_contact.birthday = body.birthday
+            # upd_contact.additional_info = body.additional_info
+            contact = upd_contact
+            # self.session.add(contact)
+            await self.session.commit()
+            await self.session.refresh(contact)
+        return contact
 
     async def delete_contact(self, contact_id):
         q = select(Contact).where(Contact.id == contact_id)

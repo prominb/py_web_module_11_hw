@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.db import get_db
 from src.contacts.repo import ContactsRepository
-from src.contacts.schemas import ContactsCreate, ContactsResponse
+from src.contacts.schemas import ContactsCreate, ContactsResponse, ContactsUpdate
 
 router = APIRouter()
 
@@ -27,7 +27,7 @@ async def create_contacts(contact: ContactsCreate, db: AsyncSession = Depends(ge
     return await repo.create_contacts(contact)
 
 
-@router.get("/{id}", response_model=list[ContactsResponse])
+@router.get("/{id}", response_model=ContactsResponse)
 async def get_by_id(id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
     repo = ContactsRepository(db)
     contact = await repo.get_by_id(id)
@@ -40,6 +40,15 @@ async def get_by_id(id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
 async def search_contacts(query: str, db: AsyncSession = Depends(get_db)):
     repo = ContactsRepository(db)
     return await repo.search_contacts(query)
+
+
+@router.put("/update_contact/{id}", response_model=ContactsResponse)
+async def update_contact(body: ContactsUpdate, id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
+    repo = ContactsRepository(db)
+    upd_contact = await repo.update_contact(id, body)
+    if upd_contact is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Contact with ID {id} Not Found")
+    return upd_contact
 
 
 @router.delete("/{contact_id}")
