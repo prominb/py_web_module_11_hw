@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.db import get_db
@@ -28,7 +28,7 @@ async def create_contacts(contact: ContactsCreate, db: AsyncSession = Depends(ge
 
 
 @router.get("/{id}", response_model=list[ContactsResponse])
-async def search_contacts(id: int, db: AsyncSession = Depends(get_db)):
+async def get_by_id(id: int = Path(ge=1), db: AsyncSession = Depends(get_db)):
     repo = ContactsRepository(db)
     contact = await repo.get_by_id(id)
     if contact is None:
